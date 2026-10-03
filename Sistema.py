@@ -88,3 +88,20 @@ class Abrir_csv:
         self.__df.info()
 
         return f'\n{linea}\nResumen del archivo\n{linea}\n{self.__df.describe()}\n'
+
+#Clase para ver archivos .mat
+class Abrir_mat:
+
+    def __init__(self, nombre_archivo):
+
+        # Intentamos abrir el archivo; si no existe, mostramos el mensaje de error
+        try:
+            datos = sio.loadmat(nombre_archivo)
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Error, archivo {nombre_archivo} no encontrado")
+
+        self.__nombre = nombre_archivo
+        self.__contenido = sio.whosmat(nombre_archivo) # Lista de tuplas con (variable, dimensiones, tipo)
+        self.__variable = self.__contenido[0][0]
+        self.__matriz = datos[self.__variable]
+
