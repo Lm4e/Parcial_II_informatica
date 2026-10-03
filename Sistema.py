@@ -1,3 +1,4 @@
+import io 
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -31,19 +32,18 @@ class Abrir_csv:
         condiciones = []
         for c in sorted(self.__df["condition"].unique()):
             condiciones.append(int(c))
-        return condiciones
+        return condiciones  
 
-# Método __str__
+    # Método __str__
     def __str__(self):
-            self.__df.info()
-            dimensiones = self.__df.shape
-            tipos_columnas = self.__df.dtypes.to_string()
-            describe_texto = self.__df.describe().to_string()
+        buffer = io.StringIO()
+        info_texto = buffer.getvalue()
+        describe_texto = self.__df.describe().to_string()
 
-            info = f"""
-            - Archivo CSV: {self.__nombre}
-            - Información general (Resumen alternativo de info):
-            - Dimensiones: {dimensiones[0]} filas y {dimensiones[1]} columnas.
-            - Tipos de datos por columna:{tipos_columnas}
-            - Resumen estadístico (describe):{describe_texto}"""
-    return info
+        info = f""" Archivo CSV: {self.__nombre}
+                    Información general (info):
+                    {info_texto}
+                    Resumen estadístico (describe):
+                    {describe_texto}
+                    """
+        return info
