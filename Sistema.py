@@ -40,7 +40,7 @@ class Abrir_csv:
 
         for c in (canal, canal_x, canal_y):
             if c not in self.ver_canales():
-                raise ValueError(f"Error, el canal {c} no existe en el archivo")
+                raise ValueError(f'Error, el canal {c} no existe en el archivo')
 
         datos = self.__df.loc[self.__df.loc[:, "condition"] == condicion]
         amplitud = datos.loc[:, canal]
@@ -49,37 +49,42 @@ class Abrir_csv:
         plt.subplot(2, 1, 1)
         plt.bar(datos.index, amplitud)
         plt.plot([0, 0], [min(amplitud), max(amplitud)], color="red")
-        plt.title(f"Stem del canal {canal} - Condición {condicion} (línea roja: t = 0 ms)")
+        plt.title(f'Stem del canal {canal} - Condición {condicion} (línea roja: t = 0 ms)')
         plt.xlabel("Tiempo (ms)")
         plt.ylabel("Amplitud (µV)")
 
         # Gráfica histograma
         ax_hist = plt.subplot(2, 2, 3)
         amplitud.plot(kind="hist", bins=30, edgecolor="black", ax=ax_hist,
-                      title=f"Histograma del canal {canal} - Condición {condicion}",
+                      title=f'Histograma del canal {canal} - Condición {condicion}',
                       xlabel="Amplitud (µV)", ylabel="Frecuencia (número de muestras)")
 
         # Gráfica scatter
         ax_scatter = plt.subplot(2, 2, 4)
         datos.plot(kind="scatter", x=canal_x, y=canal_y, s=5, ax=ax_scatter,
                    title=f"Scatter {canal_x} vs {canal_y}",
-                   xlabel=f"Canal {canal_x} (µV)", ylabel=f"Canal {canal_y} (µV)")
-        return plt.show()
+                   xlabel=f"Canal {canal_x} (µV)", ylabel=f'Canal {canal_y} (µV)')
+
+        # Apartado para guardar las gráficas de prueba
+        archivo_salida = f'graficos_{self.__nombre[:-4]}_condicion{condicion}.png'
+        plt.savefig(archivo_salida)
+        plt.show()
+        return archivo_salida
     
     # Diferencia interhemisferica
     def diferencia_interhemisferica(self, canal_izq, canal_der):
         for c in (canal_izq, canal_der):
             if c not in self.ver_canales():
-                raise ValueError(f"Error, el canal {c} no existe en el archivo")
+                raise ValueError(f'Error, el canal {c} no existe en el archivo')
 
         if canal_izq == canal_der:
             raise ValueError("Error, debe elegir dos canales diferentes")
 
-        nombre_columna = f"{canal_izq}-{canal_der}"
+        nombre_columna = f'{canal_izq}-{canal_der}'
         self.__df[nombre_columna] = self.__df.loc[:, canal_izq].sub(self.__df.loc[:, canal_der])
         return self.__df.loc[:, nombre_columna]
 
-    # Método __str__
+    # Uso del método __str__
     def __str__(self):
         linea = "=" * 50
         print(f'\n{linea}')
