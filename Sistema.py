@@ -18,7 +18,7 @@ class Abrir_csv:
         return self.__nombre
 
     def ver_dataframe(self):
-        return self.__df.copy
+        return self.__df.copy()
 
     def ver_canales(self):
         canales = []
@@ -32,3 +32,18 @@ class Abrir_csv:
         for c in sorted(self.__df["condition"].unique()):
             condiciones.append(int(c))
         return condiciones
+
+# Método __str__
+    def __str__(self):
+            self.__df.info()
+            dimensiones = self.__df.shape
+            tipos_columnas = self.__df.dtypes.to_string()
+            describe_texto = self.__df.describe().to_string()
+
+            info = f"""
+            - Archivo CSV: {self.__nombre}
+            - Información general (Resumen alternativo de info):
+            - Dimensiones: {dimensiones[0]} filas y {dimensiones[1]} columnas.
+            - Tipos de datos por columna:{tipos_columnas}
+            - Resumen estadístico (describe):{describe_texto}"""
+    return info
