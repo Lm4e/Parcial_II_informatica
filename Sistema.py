@@ -34,7 +34,7 @@ class Abrir_csv:
     def ver_condiciones(self):
         return list(self.__condiciones)
        
-    def graficar_condiciones(self, condicion, canal, canal_x, canal_y):
+    def graficar_condiciones(self, condicion, canal, canal_x, canal_y, ruta_salida):
         if condicion not in self.__condiciones:
             raise ValueError("Error, la condición elegida no existe en el archivo")
 
@@ -64,6 +64,8 @@ class Abrir_csv:
         datos.plot(kind="scatter", x=canal_x, y=canal_y, s=5, ax=ax_scatter,
                    title=f"Scatter {canal_x} vs {canal_y}",
                    xlabel=f"Canal {canal_x} (µV)", ylabel=f"Canal {canal_y} (µV)")
+ 
+        plt.savefig(ruta_salida)
         return plt.show()
     
     # Diferencia interhemisferica
