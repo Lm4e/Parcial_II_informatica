@@ -66,11 +66,25 @@ class Abrir_csv:
                    xlabel=f"Canal {canal_x} (µV)", ylabel=f"Canal {canal_y} (µV)")
         return plt.show()
     
+    # Diferencia interhemisferica
+    def diferencia_interhemisferica(self, canal_izq, canal_der):
+        for c in (canal_izq, canal_der):
+            if c not in self.ver_canales():
+                raise ValueError(f"Error, el canal {c} no existe en el archivo")
+
+        if canal_izq == canal_der:
+            raise ValueError("Error, debe elegir dos canales diferentes")
+
+        nombre_columna = f"{canal_izq}-{canal_der}"
+        self.__df[nombre_columna] = self.__df.loc[:, canal_izq].sub(self.__df.loc[:, canal_der])
+        return self.__df.loc[:, nombre_columna]
+
     # Método __str__
     def __str__(self):
-        if self.__df is None:
-            return "No hay datos cargados"
-        else:
-            print(f'Información: {self.__df.info()}')
+        linea = "=" * 50
+        print(f'\n{linea}')
+        print(f'Información del archivo {self.__nombre}')
+        print(linea)
+        self.__df.info()
 
-            print(f'Resumen: {self.__df.describe()}')
+        return f'\n{linea}\nResumen del archivo\n{linea}\n{self.__df.describe()}\n'
