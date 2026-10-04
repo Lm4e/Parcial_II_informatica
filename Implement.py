@@ -35,7 +35,7 @@ def main():
                     print(error)
 
             elif menu2 in ("2", "3", "4"):
-                nombre = input("Ingrese el nombre del archivo CSV cargado (ej n.csv): ")
+                nombre = input("Ingrese el nombre del archivo CSV cargado (ej nombre.csv): ")
                 if nombre not in archivos_csv:
                     print(f"No se encontró un archivo CSV cargado con el nombre {nombre}.")
 
