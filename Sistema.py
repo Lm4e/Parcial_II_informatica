@@ -64,11 +64,12 @@ class Abrir_csv:
         datos.plot(kind="scatter", x=canal_x, y=canal_y, s=5, ax=ax_scatter,
                    title=f"Scatter {canal_x} vs {canal_y}",
                    xlabel=f"Canal {canal_x} (µV)", ylabel=f"Canal {canal_y} (µV)")
- 
+
+        # Guardado de la gráfica
         plt.savefig(ruta_salida)
         return plt.show()
     
-    # Diferencia interhemisferica
+    # Diferencia interhemisferica (consulta)
     def diferencia_interhemisferica(self, canal_izq, canal_der):
         for c in (canal_izq, canal_der):
             if c not in self.ver_canales():
@@ -81,7 +82,7 @@ class Abrir_csv:
         self.__df[nombre_columna] = self.__df.loc[:, canal_izq].sub(self.__df.loc[:, canal_der])
         return self.__df.loc[:, nombre_columna]
 
-    # Método __str__
+    # Aplicación del método __str__
     def __str__(self):
         linea = "=" * 50
         print(f'\n{linea}')
@@ -91,7 +92,7 @@ class Abrir_csv:
 
         return f'\n{linea}\nResumen del archivo\n{linea}\n{self.__df.describe()}\n'
 
-#Clase para ver archivos .mat
+# Clase para ver archivos .mat
 class Abrir_mat:
 
     def __init__(self, nombre_archivo):
@@ -128,7 +129,7 @@ Variables (nombre, dimensiones, tipo):
 
     def operar_canales(self, funcion, canales, punto_inicial, punto_final, ruta_salida):
 
-        # 1. Qué operación es, y en qué unidad queda el resultado
+        # Definir qué operación es, y en qué unidad queda el resultado
         if funcion == self.suma:
             operacion = "suma"
             unidad = "µV"
@@ -152,7 +153,7 @@ Variables (nombre, dimensiones, tipo):
                 if c < 0 or c >= total_canales:
                     raise ValueError(f"Error, el canal {c} no existe (hay {total_canales} canales)")
         
-        #Tiempo 
+        # Tiempo 
         tiempo = np.arange(punto_inicial, punto_final) / self.__fs 
         
         # Reshape para pasar la matriz de 3D a 2D
@@ -169,7 +170,7 @@ Variables (nombre, dimensiones, tipo):
 
         plt.figure(figsize=(11, 8))
         
-# subplot 1: los 4 canales
+    # subplot 1: los 4 canales
 
         plt.subplot(2, 1, 1)   
         plt.plot(tiempo, c1, label=f"Canal {canales[0]}")
@@ -181,7 +182,7 @@ Variables (nombre, dimensiones, tipo):
         plt.ylabel("Amplitud (µV)")
         plt.legend()
 
-# subplot 2: el resultado
+    # subplot 2: el resultado
 
         plt.subplot(2, 1, 2)  
         plt.plot(tiempo, resultado, color="red", label=operacion)
@@ -203,8 +204,8 @@ def promedio_std(self, eje1, eje2, ruta_salida):
             raise ValueError("Error, debe elegir dos ejes diferentes")
 
         # Promedio a lo largo del primer eje  elegido y desviación a lo largo del segundo
-        promedio = np.mean(self.__matriz, axis=eje1) #Queda una matriz 2D
-        desviacion = np.std(self.__matriz, axis=eje2) # queda otra matriz 2D
+        promedio = np.mean(self.__matriz, axis=eje1) # Queda una matriz 2D
+        desviacion = np.std(self.__matriz, axis=eje2) # Queda otra matriz 2D
 
         # Forma final de cada resultado
         print(f"Forma del promedio (eje {eje1}): {promedio.shape}")
@@ -214,7 +215,7 @@ def promedio_std(self, eje1, eje2, ruta_salida):
         tabla = pd.DataFrame({"Promedio": pd.Series(promedio.ravel()),
                               "Desviación estándar": pd.Series(desviacion.ravel())})
 
-        # Boxplot
+        # Creación de la boxplot
         plt.figure(figsize=(7, 6))
         ax = plt.axes()
         tabla.boxplot(ax=ax)
