@@ -78,7 +78,7 @@ def main():
             else:
                 print("Opción inválida. Por favor, intente de nuevo.")
 
-elif op == "2":
+        elif op == "2":
             menu3 = input("""\nIngrese la opción deseada:
             1. Cargar archivo MAT.
             2. Ver información (variables) de un archivo MAT.
@@ -144,3 +144,33 @@ elif op == "2":
                         print(f"\nGráfico guardado como {nombre_salida}")
                     except ValueError as error:
                         print(error)
+                
+                else:
+                    print(archivo)
+                    try:
+                        eje1 = int(input("Ingrese el primer eje (0, 1 o 2): "))
+                        eje2 = int(input("Ingrese el segundo eje (0, 1 o 2): "))
+                    except ValueError:
+                        print("Error, los ejes deben ser números enteros.")
+                        continue
+
+                    nombre_salida = input("Ingrese el nombre para guardar el gráfico (ejemplo: promedio.png): ")
+
+                    try:
+                        archivo.promedio_std(eje1, eje2, nombre_salida)
+                        print(f"\nGráfico guardado como {nombre_salida}")
+                    except ValueError as error:
+                        print(error)
+
+            else:
+                print("Opción inválida. Por favor, intente de nuevo.")
+
+        elif op == "3":
+            print("Hasta luego.")
+            break
+
+        else:
+            print("Opción inválida. Por favor, intente de nuevo.")
+
+if __name__ == "__main__":
+    main()
