@@ -193,3 +193,33 @@ Variables (nombre, dimensiones, tipo):
         plt.tight_layout()
         plt.savefig(ruta_salida) # guardar antes de mostrar
         plt.show()
+
+def promedio_std(self, eje1, eje2, ruta_salida):
+
+        # Validación de los ejes
+        if eje1 not in (0, 1, 2) or eje2 not in (0, 1, 2):
+            raise ValueError("Error, los ejes deben ser 0, 1 o 2")
+        if eje1 == eje2:
+            raise ValueError("Error, debe elegir dos ejes diferentes")
+
+        # Promedio a lo largo del primer eje  elegido y desviación a lo largo del segundo
+        promedio = np.mean(self.__matriz, axis=eje1) #Queda una matriz 2D
+        desviacion = np.std(self.__matriz, axis=eje2) # queda otra matriz 2D
+
+        # Forma final de cada resultado
+        print(f"Forma del promedio (eje {eje1}): {promedio.shape}")
+        print(f"Forma de la desviación (eje {eje2}): {desviacion.shape}")
+
+        # Creación de dataframe y uso de ravel() para convertir las matrices en un vector
+        tabla = pd.DataFrame({"Promedio": pd.Series(promedio.ravel()),
+                              "Desviación estándar": pd.Series(desviacion.ravel())})
+
+        # Boxplot
+        plt.figure(figsize=(7, 6))
+        ax = plt.axes()
+        tabla.boxplot(ax=ax)
+        plt.title(f"Promedio (eje {eje1}) y desviación estándar (eje {eje2})")
+        plt.xlabel("Estadístico")
+        plt.ylabel("Amplitud (µV)")
+        plt.savefig(ruta_salida)                      
+        plt.show()
