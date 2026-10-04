@@ -77,3 +77,70 @@ def main():
 
             else:
                 print("Opción inválida. Por favor, intente de nuevo.")
+
+elif op == "2":
+            menu3 = input("""\nIngrese la opción deseada:
+            1. Cargar archivo MAT.
+            2. Ver información (variables) de un archivo MAT.
+            3. Operar 4 canales (suma, resta o multiplicación).
+            4. Promedio y desviación estándar.
+            0. Volver al menú principal.
+            Coloque aquí su opción: """)
+
+            if menu3 == "0":
+                continue
+
+            elif menu3 == "1":
+                nombre_archivo = input("Ingrese el nombre del archivo MAT (ej nombre.mat): ")
+                try:
+                    archivos_mat[nombre_archivo] = sis.Abrir_mat(nombre_archivo)
+                    print(f"Archivo {nombre_archivo} cargado exitosamente.")
+    
+                except (FileNotFoundError, ValueError) as error:
+                    print(error)
+
+            elif menu3 in ("2", "3", "4"):
+                nombre = input("Ingrese el nombre del archivo MAT cargado (ej. nombre.mat): ")
+                if nombre not in archivos_mat:
+                    print(f"No se encontró un archivo MAT cargado con el nombre {nombre}.")
+                    continue
+                archivo = archivos_mat[nombre]
+
+                if menu3 == "2":
+                    print(archivo)
+
+                elif menu3 == "3":
+                    print(archivo)   # Muestra las dimensiones (canales, muestras, ensayos)
+
+                    oper = input("""Elija la operación:
+            1. Suma.
+            2. Resta.
+            3. Multiplicación.
+            Coloque aquí su opción: """)
+                    if oper == "1":
+                        funcion = archivo.suma
+                    elif oper == "2":
+                        funcion = archivo.resta
+                    elif oper == "3":
+                        funcion = archivo.multiplicacion
+                    else:
+                        print("Opción inválida. Por favor, intente de nuevo.")
+                        continue
+
+                    try:
+                        canales = []                     
+                        for i in range(4):
+                            canales.append(int(input(f"Ingrese el canal {i + 1}: ")))
+                        punto_inicial = int(input("Ingrese el punto inicial: "))
+                        punto_final = int(input("Ingrese el punto final: "))
+                    except ValueError:
+                        print("Error, los canales y los puntos deben ser números enteros.")
+                        continue
+
+                    nombre_salida = input("Ingrese el nombre para guardar el gráfico (ejemplo: suma.png): ")
+
+                    try:
+                        archivo.operar_canales(funcion, canales, punto_inicial, punto_final, nombre_salida)
+                        print(f"\nGráfico guardado como {nombre_salida}")
+                    except ValueError as error:
+                        print(error)
